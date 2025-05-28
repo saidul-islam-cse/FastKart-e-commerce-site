@@ -20,9 +20,9 @@ def user_signup(request):
             return redirect('login')
     return render(request, "accounts/signup.html")
 
-def verify_email(request, uid64, token):
+def verify_email(request, uidb64, token):
     try:
-        uid = urlsafe_base64_decode(uid64).decode()
+        uid = urlsafe_base64_decode(uidb64).decode()
         user = models.CustomUser.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, models.CustomUser.DoesNotExist):
         user = None

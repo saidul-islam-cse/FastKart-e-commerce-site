@@ -50,23 +50,27 @@ class Product(TimeStampedModel):
     @property
     def discount_price(self):
         return self.price * (1 - self.discount_percentage / 100)
+
     @property
     def savings(self):
+        """Calculate the savings by subtracting the discount price from the original price."""
         return self.price - self.discount_price
 
     def get_discounted_price(self):
         if self.discount_price:
             return self.discount_price
         return self.price
-    
+
     class Meta:
         ordering = ("-created_at",)
 
     def __str__(self):
         return self.name
-    
+
     def averageReview(self):
-        reviews = Review.objects.filter(product=self, status=True).aaggregate(average=Avg("rating"))
+        reviews = Review.objects.filter(product=self, status=True).aggregate(
+            average=Avg("rating")
+        )
         avg = 0
         if reviews["average"] is not None:
             avg = float(reviews["average"])
@@ -74,11 +78,14 @@ class Product(TimeStampedModel):
         return avg
 
     def count_review(self):
-        reviews = Review.objects.filter(product=self, status=True).aaggregate(count=Count["id"])
+        reviews = Review.objects.filter(product=self, status=True).aggregate(
+            count=Count("id")
+        )
         count = 0
         if reviews["count"] is not None:
             count = int(reviews["count"])
         return count
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(
@@ -101,4 +108,4 @@ class Review(TimeStampedModel):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Review by {self.user.username} for {self.product.name}"
+        return f"Review by {self.user.first_name} for {self.product.name}"

@@ -89,7 +89,7 @@
                                         <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}"
                                             aria-hidden="true"></i>
                                     </ul>
-                                    <span class="review">{{product.count_review}} Customer Review</span>
+                                    <span class="review">{{ product.count_review }} Customer Review</span>
                                 </div>
                             </div>
 
@@ -164,7 +164,8 @@
                                     </div>
                                 </div>
                                 <!-- # TODO: add add_cart later -->
-                                <a href="#" class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</a>
+                                <a href="{% url 'add_cart' product.slug %}" class="btn btn-md bg-dark cart-button text-white w-100">Add To Cart</a>
+                                <a href="{% url 'remove_cart' product.slug %}" class="btn btn-md bg-dark cart-button text-white w-100">Remove To Cart</a>
                             </div>
 
                             <div class="progress-sec">
